@@ -3,6 +3,7 @@ package servlet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import bean.ExcelData;
+import controller.ExcelDataCon;
 
 /**
  * Servlet implementation class UploadDataServ
@@ -44,7 +46,8 @@ public class UploadDataServ extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
-		
+		PrintWriter out= response.getWriter();
+		ExcelDataCon edc = new ExcelDataCon();
 		// 1. get received JSON data from request
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String json = "";
@@ -63,7 +66,10 @@ public class UploadDataServ extends HttpServlet {
  
         for(ExcelData exce : exs){
         	System.out.println("Name is -- "+exce.getName());
-        }        
+        }
+        
+        int result = edc.insertdata(exs);
+        out.print(result);
 	}
 
 }

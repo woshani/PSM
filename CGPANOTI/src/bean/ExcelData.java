@@ -3,7 +3,7 @@ package bean;
 public class ExcelData {
 	// declare variable for excel data details
 	private String bil;
-	private String name;
+	private String namestud;
 	private String matricNumber;
 	private String course;
 	private String cohort;
@@ -16,11 +16,11 @@ public class ExcelData {
 
 	// setter and getter for variable
 	public String getName() {
-		return name;
+		return namestud;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.namestud = name;
 	}
 
 	public String getMatricNumber() {
