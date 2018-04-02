@@ -153,6 +153,13 @@
 				data: st,
 				success:function(databackk){
 					console.log(databackk);
+					if(databackk===1){
+						shownoti("Data in excell file has been uploaded!",
+						"success");
+					}else if(databackk===0){
+						shownoti("Data in excell file failed to upload!",
+						"danger");
+					}
 				},
 				dataType: 'json',
 				contentType: 'application/json',
