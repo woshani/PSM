@@ -16,16 +16,17 @@
 					</div>
 				</div>
 				<div class="col-md-2">
-					<div class="form-group label-floating">
+					<div class="form-group label-floating" id="divcourse">
 						<label class="control-label">Course</label> <select class="form-control" id="selcourselist">
-							<option selected disabled>Please select Session</option>
+							<option selected disabled>Please select course</option>
 						</select>
 					</div>
 				</div>
 				<div class="col-md-2">
-					<div class="form-group label-floating">
-						<label class="control-label">Year</label> <input type="text"
-							class="form-control" id="stafffullname">
+					<div class="form-group label-floating" id="divyear">
+						<label class="control-label">Year</label><select class="form-control" id="selyearlist">
+							<option selected disabled>Please select year</option>
+						</select>
 					</div>
 				</div>
 			</div>

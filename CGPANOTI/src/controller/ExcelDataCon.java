@@ -131,5 +131,34 @@ public class ExcelDataCon {
 		
 		return courses;
 	}
+	
+	public ArrayList<String> getYearList(String sessions,String course){
+		ArrayList<String> Years = new ArrayList<String>();
+		
+		String sql = "{call getYears(?,?,?)}";
+		CallableStatement cstm = null;
+		
+        try {
+            conn = dbconn.getConnection();
+            cstm = conn.prepareCall(sql);
+            cstm.setString(1, course);
+            cstm.setString(2, sessions);
+            cstm.registerOutParameter(3, OracleTypes.CURSOR);
+            cstm.executeQuery();
+            ResultSet rs = (ResultSet) cstm.getObject(3);
+
+            while (rs.next()) {
+            	Years.add(rs.getString(1));
+            }
+            cstm.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return Years;
+	}
 }
 

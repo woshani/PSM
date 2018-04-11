@@ -15,7 +15,7 @@
 <body>
 	<div class="wrapper">
 		<div class="sidebar" data-color="purple"
-			data-image="assets/img/sidebar-1.jpg">
+			data-image="../assets/img/sidebar-1.jpg">
 			<div class="logo">
 				<a href="" class="simple-text"> GPA NOTIFICATION </a> Welcome <b><%=session.getAttribute("fullname")%></b>
 			</div>

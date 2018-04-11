@@ -118,11 +118,16 @@ $(document).ready(function() {
 	showbarchart(dataEmailsSubscriptionChart,'#overviewChart');
 	
 	getsesiajax();
+	$('#formoverview #divcourse').hide();
+	$('#formoverview #divyear').hide();
+	
 });
 
 $('#formoverview #selsesilist').on('change',function(){
 	var sesi = $(this).val();
 	$('#formoverview #selcourselist').find('option').remove();
+	$('#formoverview #divcourse').hide();
+	$('#formoverview #divyear').hide();
 	$.ajax({
 		type:"post",
 		data:{sesi : sesi},
@@ -130,10 +135,35 @@ $('#formoverview #selsesilist').on('change',function(){
 		success:function(databack){
 			console.log(databack);
 			databack = $.parseJSON(databack);
+			$('#formoverview #divcourse').show();
+			$('#formoverview #selcourselist').append('<option selected disabled>Please select course</option>');
 			var i;
 			for (i = 0; i < databack.length; i++) {
 				 var option = new Option(databack[i], databack[i]);
 				 $('#formoverview #selcourselist').append($(option));
+			}
+		}
+	})
+});
+
+$('#formoverview #selcourselist').on('change',function(){
+	var sesi = $('#formoverview #selsesilist').val();
+	var course = $(this).val();
+	$('#formoverview #divyear').hide();
+	$('#formoverview #selyearlist').find('option').remove();
+	$.ajax({
+		type:"post",
+		data:{sesi : sesi,course : course},
+		url:"../ListYearServ",
+		success:function(databack){
+			console.log(databack);
+			databack = $.parseJSON(databack);
+			$('#formoverview #divyear').show();
+			$('#formoverview #selyearlist').append('<option selected disabled>Please select years</option>');
+			var i;
+			for (i = 0; i < databack.length; i++) {
+				 var option = new Option(databack[i], databack[i]);
+				 $('#formoverview #selyearlist').append($(option));
 			}
 		}
 	})
