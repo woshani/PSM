@@ -1,0 +1,311 @@
+--------------------------------------------------------
+--  DDL for Table RESULTS
+--------------------------------------------------------
+
+  CREATE TABLE "SHAY"."RESULTS" 
+   (	"ID" VARCHAR2(20 BYTE), 
+	"MATRIC_NO" VARCHAR2(20 BYTE), 
+	"SEMESTER" VARCHAR2(20 BYTE), 
+	"YEARS" VARCHAR2(20 BYTE), 
+	"SESSIONS" VARCHAR2(20 BYTE), 
+	"GPA" NUMBER(3,2)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index RESULTS_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SHAY"."RESULTS_PK" ON "SHAY"."RESULTS" ("ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Trigger CHECK_RES
+--------------------------------------------------------
+
+  CREATE OR REPLACE TRIGGER "SHAY"."CHECK_RES" 
+BEFORE INSERT ON results
+FOR EACH ROW 
+DECLARE
+v_count NUMBER;
+BEGIN
+
+SELECT COUNT(*)
+  INTO v_count
+  FROM results
+  WHERE semester = :NEW.semester and years = :new.years and sessions = :new.sessions and MATRIC_NO = :new.matric_no;
+
+  IF (v_count = 1) THEN
+  Raise_Application_Error (-20010, 'ALREADY');
+  END IF;
+
+END;
+/
+ALTER TRIGGER "SHAY"."CHECK_RES" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_RES
+--------------------------------------------------------
+
+  CREATE OR REPLACE TRIGGER "SHAY"."T_RES" 
+BEFORE INSERT ON results
+FOR EACH ROW 
+DECLARE
+BEGIN
+if (:NEW.ID is null) then
+:NEW.ID := 'STUD'||sq_results.nextval;
+end if;
+END;
+/
+ALTER TRIGGER "SHAY"."T_RES" ENABLE;
+--------------------------------------------------------
+--  Constraints for Table RESULTS
+--------------------------------------------------------
+
+  ALTER TABLE "SHAY"."RESULTS" ADD CONSTRAINT "RESULTS_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+ 
+  ALTER TABLE "SHAY"."RESULTS" MODIFY ("ID" NOT NULL ENABLE);
+
+
+--------------------------------------------------------
+--  DDL for Table STAFF
+--------------------------------------------------------
+
+  CREATE TABLE "SHAY"."STAFF" 
+   (  "STAFF_NO" VARCHAR2(20 BYTE), 
+  "FULL_NAME" VARCHAR2(80 BYTE), 
+  "ADDRESS" VARCHAR2(255 BYTE), 
+  "EMAIL" VARCHAR2(20 BYTE), 
+  "PHONE_NUMBER" VARCHAR2(15 BYTE), 
+  "PASSWORD" VARCHAR2(255 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index STAFF_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SHAY"."STAFF_PK" ON "SHAY"."STAFF" ("STAFF_NO") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Trigger CHECK_STAFF
+--------------------------------------------------------
+
+  CREATE OR REPLACE TRIGGER "SHAY"."CHECK_STAFF" 
+BEFORE INSERT ON STAFF
+FOR EACH ROW 
+DECLARE
+v_count NUMBER;
+BEGIN
+
+SELECT COUNT(*)
+  INTO v_count
+  FROM staff
+  WHERE staff_no = :NEW.staff_no;
+
+  IF (v_count = 1) THEN
+  Raise_Application_Error (-20010, 'ALREADY');
+  END IF;
+
+END;
+/
+ALTER TRIGGER "SHAY"."CHECK_STAFF" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_STAFF
+--------------------------------------------------------
+
+  CREATE OR REPLACE TRIGGER "SHAY"."T_STAFF" 
+BEFORE INSERT ON staff
+FOR EACH ROW 
+DECLARE
+BEGIN
+if (:NEW.password is null) then
+:NEW.password := 'abc123';
+end if;
+END;
+/
+ALTER TRIGGER "SHAY"."T_STAFF" ENABLE;
+--------------------------------------------------------
+--  Constraints for Table STAFF
+--------------------------------------------------------
+
+  ALTER TABLE "SHAY"."STAFF" ADD CONSTRAINT "STAFF_PK" PRIMARY KEY ("STAFF_NO")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+ 
+  ALTER TABLE "SHAY"."STAFF" MODIFY ("STAFF_NO" NOT NULL ENABLE);
+
+--------------------------------------------------------
+--  DDL for Table STUDENT
+--------------------------------------------------------
+
+  CREATE TABLE "SHAY"."STUDENT" 
+   (  "ID" VARCHAR2(20 BYTE), 
+  "MATRIC_NO" VARCHAR2(20 BYTE), 
+  "FULL_NAME" VARCHAR2(80 BYTE), 
+  "COURSE" VARCHAR2(20 BYTE), 
+  "COHORT" VARCHAR2(20 BYTE), 
+  "STATUS" VARCHAR2(20 BYTE), 
+  "ACADEMIC_ADVISOR" VARCHAR2(90 BYTE), 
+  "PHONE_NUMBER" VARCHAR2(15 BYTE), 
+  "MUET" VARCHAR2(20 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index STUDENT_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SHAY"."STUDENT_PK" ON "SHAY"."STUDENT" ("ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Trigger CHECK_STUD
+--------------------------------------------------------
+
+  CREATE OR REPLACE TRIGGER "SHAY"."CHECK_STUD" 
+BEFORE INSERT ON STUDENT
+FOR EACH ROW 
+DECLARE
+v_count NUMBER;
+BEGIN
+
+SELECT COUNT(*)
+  INTO v_count
+  FROM student
+  WHERE MATRIC_NO = :NEW.MATRIC_NO;
+
+  IF (v_count = 1) THEN
+  Raise_Application_Error (-20010, 'ALREADY');
+  END IF;
+
+END;
+/
+ALTER TRIGGER "SHAY"."CHECK_STUD" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger T_STUD
+--------------------------------------------------------
+
+  CREATE OR REPLACE TRIGGER "SHAY"."T_STUD" 
+BEFORE INSERT ON student
+FOR EACH ROW 
+DECLARE
+BEGIN
+if (:NEW.ID is null) then
+:NEW.ID := 'STUD'||sq_stud.nextval;
+end if;
+END;
+/
+ALTER TRIGGER "SHAY"."T_STUD" ENABLE;
+--------------------------------------------------------
+--  Constraints for Table STUDENT
+--------------------------------------------------------
+
+  ALTER TABLE "SHAY"."STUDENT" ADD CONSTRAINT "STUDENT_PK" PRIMARY KEY ("ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+ 
+  ALTER TABLE "SHAY"."STUDENT" MODIFY ("ID" NOT NULL ENABLE);
+
+
+-------------------------------------------------------
+procedure
+-------------------------------------------------------
+
+create or replace procedure getListStaff(p_cursor out SYS_REFCURSOR)
+AS
+begin
+open p_cursor for
+select staff_no,full_name,address,email,phone_number from staff;
+end;
+
+
+create or replace procedure ins_results(p_id in varchar2,p_sem in varchar2,p_year in varchar2,p_sesi in  varchar2,p_gpa in number)
+as
+begin
+insert into results(matric_no,semester,years,sessions,gpa) values(p_id,p_sem,p_year,p_sesi,p_gpa);
+end;
+
+create or replace procedure ins_staff(p_id in varchar2,p_name in varchar2,p_address in varchar2,p_email in varchar2,p_phone in varchar2,p_pass in varchar2)
+as
+begin
+     insert into staff(staff_no,full_name,address,email,phone_number,password)values(p_id,p_name,p_address,p_email,p_phone,p_pass);
+end;
+
+
+create or replace procedure insexceldata (
+   p_array in EXCELDATAOBJECTARRAY
+) AS
+   excelobject EXCELDATAOBJECT;
+BEGIN
+  for i in 1 .. p_array.count loop
+    excelobject := p_array(i);
+    insert into student(matric_no,full_name,course,cohort,status,academic_advisor,phone_number,muet)values(excelobject.matricNumber,excelobject.namestud,excelobject.course,excelobject.cohort,excelobject.status,excelobject.academicAdvisor,excelobject.phoneNumber,excelobject.muet);
+    ins_results(excelobject.matricNumber,SUBSTR(excelobject.yearsem,-1,1),SUBSTR(excelobject.yearsem,1,1),excelobject.sessions,to_number(SUBSTR(excelobject.gpa,2,4)));
+  end loop;
+END;
+
+
+
+create or replace procedure login(p_id IN varchar2,p_pass IN varchar2,p_staff_id OUT varchar2,p_name OUT varchar2,p_address OUT VARCHAR2,p_email OUT varchar2,p_phone_number out varchar2,p_password out varchar2)
+as
+begin
+select staff_no,full_name,address,email,phone_number,staff.password into p_staff_id,p_name,p_address,p_email,p_phone_number,p_password FROM staff where staff_no = p_id and staff.password = p_pass;
+end;
+
+
+
+----------------------------------------------------
+type
+---------------------------------------------------
+create or replace TYPE EXCELDATAOBJECT AS OBJECT
+(
+  bil varchar2(80),
+  namestud varchar2(80),
+  matricNumber varchar(80),
+  course varchar2(80),
+  cohort varchar2(80),
+  muet varchar2(80),
+  yearsem varchar2(80),
+  status varchar2(80),
+  gpa varchar2(80),
+  academicAdvisor varchar2(80),
+  phoneNumber varchar(80),
+  sessions varchar2(20)
+);
+
+
+create or replace TYPE EXCELDATAOBJECTARRAY AS TABLE OF EXCELDATAOBJECT;
+
+
+
+-------------------------------------------------------
+sequence
+------------------------------------------------------
+
+   CREATE SEQUENCE  "SHAY"."SQ_RESULTS"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 53 NOCACHE  NOORDER  NOCYCLE ;
+ 
+
+   
+   CREATE SEQUENCE  "SHAY"."SQ_STUD"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 54 NOCACHE  NOORDER  NOCYCLE ;
+ 
