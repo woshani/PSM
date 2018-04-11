@@ -274,6 +274,20 @@ select staff_no,full_name,address,email,phone_number,staff.password into p_staff
 end;
 
 
+create or replace procedure getCourse(p_sesi in varchar2,p_cursor out SYS_REFCURSOR)
+AS
+BEGIN
+open p_cursor for
+select s.course from student s inner join RESULTS r on r.MATRIC_NO = s.MATRIC_NO and r.SESSIONS= p_sesi group by s.course;
+end;
+
+create or replace procedure getYears(p_course in varchar2,p_sesi in varchar2,p_cursor out SYS_REFCURSOR)
+AS
+BEGIN
+open p_cursor for
+select r.years from results r inner join student s on s.MATRIC_NO = r.MATRIC_NO and s.COURSE = p_course where r.SESSIONS = p_sesi group by r.years;
+end;
+
 
 ----------------------------------------------------
 type
@@ -306,6 +320,6 @@ sequence
    CREATE SEQUENCE  "SHAY"."SQ_RESULTS"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 53 NOCACHE  NOORDER  NOCYCLE ;
  
 
-   
+
    CREATE SEQUENCE  "SHAY"."SQ_STUD"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 54 NOCACHE  NOORDER  NOCYCLE ;
  
