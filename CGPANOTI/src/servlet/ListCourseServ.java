@@ -12,23 +12,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
-import bean.ExcelData;
 import controller.ExcelDataCon;
 
 /**
- * Servlet implementation class UploadDataServ
+ * Servlet implementation class ListCourseServ
  */
-@WebServlet("/UploadDataServ")
-public class UploadDataServ extends HttpServlet {
+@WebServlet("/ListCourseServ")
+public class ListCourseServ extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UploadDataServ() {
+    public ListCourseServ() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -47,29 +45,15 @@ public class UploadDataServ extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 		PrintWriter out= response.getWriter();
-		ExcelDataCon edc = new ExcelDataCon();
-		// 1. get received JSON data from request
-        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String json = "";
-        if(br != null){
-            json = br.readLine();
-        }
-                
-        // 2. initiate jackson mapper
-        ObjectMapper mapper = new ObjectMapper();
- 
-        // 3. Convert received JSON to Article
-        ArrayList<ExcelData> exs = mapper.readValue(json, new TypeReference<ArrayList<ExcelData>>(){});
- 
-        // 4. Set response type to JSON
-        response.setContentType("application/json");            
- 
-        for(ExcelData exce : exs){
-        	System.out.println("Name is -- "+exce.getSesi());
-        }
+		
+		//BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+        String jsonGet = request.getParameter("sesi");
         
-        int result = edc.insertdata(exs);
-        out.print(result);
+        System.out.println(jsonGet);
+		ExcelDataCon exc = new ExcelDataCon();
+		ArrayList<String> course = exc.getCourseList(jsonGet);
+		String json = new Gson().toJson(course);
+        out.print(json); 
 	}
 
 }

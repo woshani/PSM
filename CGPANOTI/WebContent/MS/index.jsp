@@ -17,7 +17,7 @@
 		<div class="sidebar" data-color="purple"
 			data-image="../assets/img/sidebar-1.jpg">
 			<div class="logo">
-				<a href="" class="simple-text"> CGPA NOTIFICATION </a> Welcome <b><%=session.getAttribute("fullname")%></b>
+				<a href="" class="simple-text"> GPA NOTIFICATION </a> Welcome <b><%=session.getAttribute("fullname")%></b>
 			</div>
 			<div class="sidebar-wrapper">
 				<ul class="nav">

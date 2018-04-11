@@ -17,7 +17,7 @@
 		<div class="sidebar" data-color="purple"
 			data-image="assets/img/sidebar-1.jpg">
 			<div class="logo">
-				<a href="" class="simple-text"> CGPA NOTIFICATION </a> Welcome <b><%=session.getAttribute("fullname")%></b>
+				<a href="" class="simple-text"> GPA NOTIFICATION </a> Welcome <b><%=session.getAttribute("fullname")%></b>
 			</div>
 			<div class="sidebar-wrapper">
 				<ul class="nav">
@@ -99,6 +99,7 @@
 <script>
 	var oFileIn;
 	var oJS;
+	var newOJS;
 	var arr = new Array();
 
 	/*
@@ -124,14 +125,30 @@
 				 */
 				var worksheet = wb.Sheets[sheetName];
 				oJS = XLS.utils.sheet_to_json(worksheet);
-
+				newOJS = XLS.utils.sheet_to_json(worksheet);
+				
+				var sts = JSON.stringify(newOJS[1]);
+				var stringW = sts.split("SESI PENGAJIAN :").pop();
+				var sesi = stringW.substring(0,12);
+				//console.log(stringW);
+				//console.log(sesi);
+				
 				oJS.splice(0, 3);
-				var newarr = arr.concat(oJS);
+				var xxxx = oJS;
+				//xxxx["sesi"] = sesi;
+				$.each(xxxx ,function(poss,obj){
+					obj.sessions = sesi.trim();
+				});
+				//console.log(xxxx);
+				
+				var newarr = arr.concat(xxxx);
 				arr = newarr;
+				
+				
 			});
 
 			
-			var keys = ["bil", "name","matricNumber","course","cohort","muet","yearsem","gpa","academicAdvisor","status","phoneNumber"];
+			var keys = ["bil", "name","matricNumber","course","cohort","muet","yearsem","gpa","academicAdvisor","status","phoneNumber","sesi"];
 			$.each(arr ,function(pos,obj){
 			    var counter = 0;
 			    $.each(obj,function(key,value){
@@ -143,6 +160,7 @@
 			
 			//convert array into string
 			var st = JSON.stringify(arr);
+			console.log(st);
 			
 			/*
 				ajax to send data to the servlet

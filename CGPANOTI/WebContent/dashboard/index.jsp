@@ -17,7 +17,7 @@
 		<div class="sidebar" data-color="purple"
 			data-image="../assets/img/sidebar-1.jpg">
 			<div class="logo">
-				<a href="" class="simple-text"> CGPA NOTIFICATION </a> Welcome <b><%=session.getAttribute("fullname")%>
+				<a href="" class="simple-text"> GPA NOTIFICATION </a> Welcome <b><%=session.getAttribute("fullname")%>
 			</div>
 			<div class="sidebar-wrapper">
 				<ul class="nav">
@@ -69,7 +69,7 @@
 
 						</div>
 						<div class="col-lg-3 col-md-6 col-sm-6">
-							<a href=""><div class="card card-stats">
+							<a href="../ST/index.jsp"><div class="card card-stats">
 									<div class="card-header" data-background-color="blue">
 										<i class="material-icons">show_chart</i>
 									</div>

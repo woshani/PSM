@@ -1,4 +1,3 @@
-/servlet/
-/connection/
-/controller/
 /bean/
+/controller/
+/servlet/

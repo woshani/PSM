@@ -7,7 +7,7 @@
 <!-- Bootstrap core CSS     -->
 <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
 <link href="assets/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
-<title>CGPA NOTIFICATION</title>
+<title>GPA NOTIFICATION</title>
 </head>
 <body>
 	<div class="container">

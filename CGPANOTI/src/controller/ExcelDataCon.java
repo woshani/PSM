@@ -2,10 +2,14 @@ package controller;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import bean.ExcelData;
+import bean.Staff;
 import connection.OracleConnection;
+import oracle.jdbc.OracleTypes;
 import oracle.sql.ARRAY;
 import oracle.sql.ArrayDescriptor;
 import oracle.sql.STRUCT;
@@ -36,7 +40,7 @@ public class ExcelDataCon {
 	        for (int index = 0; index < exs.size(); index++)
 	        {
 	            ExcelData ex = exs.get(index);
-	            Object[] params = new Object[11];
+	            Object[] params = new Object[12];
 	            params[0] = ex.getBil();
 	            params[1] = ex.getName();
 	            params[2] = ex.getMatricNumber();
@@ -48,6 +52,7 @@ public class ExcelDataCon {
 	            params[8] = ex.getGpa();
 	            params[9] = ex.getAcademicAdvisor();
 	            params[10] = ex.getPhoneNumber();
+	            params[11] = ex.getSesi();
 	            
 	            STRUCT struct = new STRUCT(structDescriptor, conn, params);
 	            structs[index] = struct;
@@ -72,4 +77,59 @@ public class ExcelDataCon {
 		return statusquery;
 	}
 	
+	public ArrayList<String> getSesiList(){
+		ArrayList<String> sesis = new ArrayList<String>();
+		
+		String sql = "{call getSesi(?)}";
+		CallableStatement cstm = null;
+		
+        try {
+            conn = dbconn.getConnection();
+            cstm = conn.prepareCall(sql);
+            cstm.registerOutParameter(1, OracleTypes.CURSOR);
+            cstm.executeQuery();
+            ResultSet rs = (ResultSet) cstm.getObject(1);
+
+            while (rs.next()) {
+            	sesis.add(rs.getString(1));
+            }
+            cstm.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return sesis;
+	}
+	
+	public ArrayList<String> getCourseList(String sessions){
+		ArrayList<String> courses = new ArrayList<String>();
+		
+		String sql = "{call getCourse(?,?)}";
+		CallableStatement cstm = null;
+		
+        try {
+            conn = dbconn.getConnection();
+            cstm = conn.prepareCall(sql);
+            cstm.setString(1, sessions);
+            cstm.registerOutParameter(2, OracleTypes.CURSOR);
+            cstm.executeQuery();
+            ResultSet rs = (ResultSet) cstm.getObject(2);
+
+            while (rs.next()) {
+            	courses.add(rs.getString(1));
+            }
+            cstm.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return courses;
+	}
 }
+

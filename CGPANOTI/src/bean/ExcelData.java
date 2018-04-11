@@ -13,6 +13,7 @@ public class ExcelData {
 	private String gpa;
 	private String academicAdvisor;
 	private String phoneNumber;
+	private String sesi;
 
 	// setter and getter for variable
 	public String getName() {
@@ -103,4 +104,12 @@ public class ExcelData {
 		this.bil = bil;
 	}
 
+	public String getSesi() {
+		return sesi;
+	}
+
+	public void setSesi(String sesi) {
+		this.sesi = sesi;
+	}
+			
 }

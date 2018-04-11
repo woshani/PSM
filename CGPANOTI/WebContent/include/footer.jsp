@@ -10,7 +10,7 @@
 		<script>
 			document.write(new Date().getFullYear())
 		</script>
-		<a href="">CGPA NOTI</a>, made with love for parent to know your
+		<a href="">GPA NOTI</a>, made with love for parent to know your
 		results.
 	</p>
 </div>

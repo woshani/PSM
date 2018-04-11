@@ -33,5 +33,36 @@ function shownoti(messagee,typee){
         }
     });
 }
+function showbarchart(dataChart,idDiv){
+    var optionbarchart = {
+            axisX: {
+                showGrid: false
+            },
+            low: 0,
+            high: 1000,
+            chartPadding: {
+                top: 0,
+                right: 5,
+                bottom: 0,
+                left: 0
+            }
+        };
+        var responsiveOptions = [
+            ['screen and (max-width: 640px)', {
+                seriesBarDistance: 5,
+                axisX: {
+                    labelInterpolationFnc: function(value) {
+                        return value[0];
+                    }
+                }
+            }]
+        ];
+        var barcharts = Chartist.Bar(idDiv, dataChart, optionbarchart, responsiveOptions);
+
+        //start animation for the charts
+        md.startAnimationForBarChart(barcharts);
+}
+
+
 </script>
 
