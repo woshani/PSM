@@ -2,7 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%
 	session = request.getSession(false);
-	if (session.getAttribute("userid") == null) {
+	if (session.getAttribute("staffid") == null) {
 		response.sendRedirect("../index.jsp?x=3");
 	}
 %>

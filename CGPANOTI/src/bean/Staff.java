@@ -6,7 +6,6 @@ public class Staff {
 	private String address;
 	private String email;
 	private String phoneNum;
-	private String userID;
 	private String password;
 	
 	
@@ -39,12 +38,6 @@ public class Staff {
 	}
 	public void setPhoneNum(String phoneNum) {
 		this.phoneNum = phoneNum;
-	}
-	public String getUserID() {
-		return userID;
-	}
-	public void setUserID(String userID) {
-		this.userID = userID;
 	}
 	public String getPassword() {
 		return password;

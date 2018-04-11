@@ -52,7 +52,6 @@ public class LoginServ extends HttpServlet {
 				response.sendRedirect("index.jsp?x=2");
 			}else {
 				HttpSession session=request.getSession();  
-		        session.setAttribute("userid",staff.getUserID());
 		        session.setAttribute("staffid",staff.getStaffID());
 		        session.setAttribute("fullname",staff.getFullName());
 		        session.setAttribute("address",staff.getAddress());

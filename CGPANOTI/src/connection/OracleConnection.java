@@ -15,7 +15,7 @@ public class OracleConnection {
     public OracleConnection() {
     	//initialised connection details
     	driver          ="oracle.jdbc.driver.OracleDriver";
-        dbName          ="CGPADB";        
+        dbName          ="GPANOTI";        
         connectionURL   ="jdbc:oracle:thin:@localhost:1521:";
         username        ="shay";
         password        ="shay";

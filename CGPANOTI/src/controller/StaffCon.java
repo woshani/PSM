@@ -24,7 +24,7 @@ public class StaffCon {
 	public Staff getStaffDetail(String username,String password) {
 		Staff staff = new Staff();
 		
-		String sql = "{call login(?,?,?,?,?,?,?,?,?)}";
+		String sql = "{call login(?,?,?,?,?,?,?,?)}";
 		CallableStatement cstm = null;
 		
 		try {
@@ -38,7 +38,6 @@ public class StaffCon {
 			cstm.registerOutParameter(6, OracleTypes.VARCHAR);
 			cstm.registerOutParameter(7, OracleTypes.VARCHAR);
 			cstm.registerOutParameter(8, OracleTypes.VARCHAR);
-			cstm.registerOutParameter(9, OracleTypes.VARCHAR);
 			cstm.executeQuery();
 			
 			staff.setStaffID(cstm.getString(3));
@@ -46,8 +45,7 @@ public class StaffCon {
 			staff.setAddress(cstm.getString(5));
 			staff.setEmail(cstm.getString(6));
 			staff.setPhoneNum(cstm.getString(7));
-			staff.setUserID(cstm.getString(8));
-			staff.setPassword(cstm.getString(9));
+			staff.setPassword(cstm.getString(8));
 			
 			cstm.close();
 		} catch (Exception e) {
@@ -78,7 +76,6 @@ public class StaffCon {
                 staff.setEmail(rs.getString(4));
                 staff.setFullName(rs.getString(2));
                 staff.setPhoneNum(rs.getString(5));
-                staff.setUserID(rs.getString(6));
                 staffs.add(staff);
             }
             cstm.close();
@@ -90,8 +87,9 @@ public class StaffCon {
     
     public String registerStaff(Staff staff) {
     	String msg = null;
-    	String sql = "{call ins_staff(?,?,?,?,?,?,?) }";
+    	String sql = "{call ins_staff(?,?,?,?,?,?) }";
     	CallableStatement cstm = null;
+    	int status = 0 ;
     	
     	try {
             conn = dbconn.getConnection();
@@ -102,14 +100,18 @@ public class StaffCon {
             cstm.setString(4, staff.getEmail());
             cstm.setString(5, staff.getPhoneNum());
             cstm.setString(6, staff.getPassword());
-            cstm.registerOutParameter(7, OracleTypes.VARCHAR);
-            cstm.executeUpdate();
-            msg = cstm.getString(7);
+            status = cstm.executeUpdate();
             cstm.close();
             
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            status = ((SQLException) e).getErrorCode();
         }
+    	if (status == 1) {
+			msg = "SUCCESS";
+		} else if (status == 20010) {
+			msg = "ALREADY";
+		}
     	return msg;
     }
 	
