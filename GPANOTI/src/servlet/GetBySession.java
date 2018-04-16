@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,20 +12,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import bean.Staff;
-import controller.StaffCon;
+import controller.ExcelDataCon;
 
 /**
- * Servlet implementation class RegisterStaff
+ * Servlet implementation class getBySession
  */
-@WebServlet("/RegisterStaff")
-public class RegisterStaff extends HttpServlet {
+@WebServlet("/getBySession")
+public class GetBySession extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RegisterStaff() {
+    public GetBySession() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,7 +34,6 @@ public class RegisterStaff extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -43,29 +42,16 @@ public class RegisterStaff extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
-		String staffid = request.getParameter("staffid");
-		String name= request.getParameter("fullname");
-		String phone= request.getParameter("phone");
-		String email= request.getParameter("email");
-		String address= request.getParameter("address");
-		String createBy = request.getParameter("create_by");
-		String msg;
-		System.out.println(createBy);
-		Staff s = new Staff();
-		StaffCon sc = new StaffCon();
-		PrintWriter out= response.getWriter();
+PrintWriter out= response.getWriter();
 		
-		s.setStaffID(staffid);
-		s.setFullName(name);
-		s.setEmail(email);
-		s.setPhoneNum(phone);
-		s.setAddress(address);
-		s.setPassword("abc123");
-		s.setCreateBy(createBy);
-		
-		msg = sc.registerStaff(s);
-		
-		out.print(msg);
+		//BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+        String jsonGetsesi = request.getParameter("sesi");
+        String jsonGetcourse = request.getParameter("kos");
+
+		ExcelDataCon exc = new ExcelDataCon();
+		ArrayList<ArrayList<String>> res = exc.getBySesi(jsonGetsesi, jsonGetcourse);
+		String json = new Gson().toJson(res);
+        out.print(json); 
 	}
 
 }

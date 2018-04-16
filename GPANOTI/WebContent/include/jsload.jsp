@@ -33,7 +33,7 @@ function shownoti(messagee,typee){
         }
     });
 }
-function showbarchart(dataChart,idDiv,optionbarchart){
+function showbarchart(dataChart,idDiv,optionbarchart,charttype){
         var responsiveOptions = [
             ['screen and (max-width: 640px)', {
                 seriesBarDistance: 5,
@@ -44,10 +44,17 @@ function showbarchart(dataChart,idDiv,optionbarchart){
                 }
             }]
         ];
-        var barcharts = Chartist.Bar(idDiv, dataChart, optionbarchart, responsiveOptions);
+        
 
         //start animation for the charts
-        md.startAnimationForBarChart(barcharts);
+        if(charttype==='line'){
+        	var linecharts = new Chartist.Line(idDiv, dataChart, optionbarchart,responsiveOptions);
+        	md.startAnimationForLineChart(linecharts)
+        }else if(charttype==='bar'){
+        	var barcharts = Chartist.Bar(idDiv, dataChart, optionbarchart, responsiveOptions);
+        	md.startAnimationForBarChart(barcharts);
+        }
+        
 }
 
 

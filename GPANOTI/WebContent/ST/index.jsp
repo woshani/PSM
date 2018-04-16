@@ -105,7 +105,7 @@ function getsesiajax(){
 	})
 }
 
-function graphControll(labesData,seriesData,location,height){
+function graphControll(labesData,seriesData,location,height,charttype){
 	var dataGraph = {
 	        labels: labesData,
 	        series: seriesData
@@ -123,7 +123,7 @@ function graphControll(labesData,seriesData,location,height){
                 left: 0
             }
         };
-	showbarchart(dataGraph,location,optionbarchart);
+	showbarchart(dataGraph,location,optionbarchart,charttype);
 }
 
 //function when document load 
@@ -190,7 +190,7 @@ $('#formoverview #btnSearchOverview').on('click',function(){
 	$.ajax({
 		type:'post',
 		url:'../getBySession',
-		data:{sesi : sesi, kos : course ,year : year},
+		data:{sesi : sesi, kos : course },
 		success:function(databack){
 			$('#divForGraphOverview').show();
 			$('#divForGraphOverview #titleOverview').html('GPA with 3.0 and above');
@@ -211,7 +211,58 @@ $('#formoverview #btnSearchOverview').on('click',function(){
 			}
 			
 			weirdData.push(seriesData);
-			graphControll(labelData,weirdData,'#overviewChart',totalHeight);
+			graphControll(labelData,weirdData,'#overviewChart',totalHeight,'bar');
+		}
+	})
+});
+
+$('#formovperf #btnSearchPerf').on('click',function(){
+	var matrik = $('#formovperf #studperfmatric').val();
+
+	$.ajax({
+		type:'post',
+		url:'../GetByMatric',
+		data:{matrik : matrik},
+		success:function(databack){
+			databack = $.parseJSON(databack);
+			//alert(databack);
+			console.log(databack);
+			var matriks = databack.Matric;
+			var name = databack.Name;
+			var PA = databack.PA;
+			var cohort = databack.cohort;
+			var course = databack.course;
+			var phone = databack.phone;
+			var result = databack.results;
+			var status = databack.status;
+			
+			$(' #idDetails #studDetail #matrik').html('Matric Number : '+matriks);
+			$(' #idDetails #studDetail #name').html('Name : '+name);
+			$(' #idDetails #studDetail #phone').html('Phone Number : '+phone);
+			$(' #idDetails #studDetail #status').html('Status : '+status);
+			$(' #idDetails #studDetail #course').html('Course : '+course);
+			$(' #idDetails #studDetail #cohort').html('Cohort : '+cohort);
+			$(' #idDetails #studDetail #PA').html('Academic Advisor : '+PA);
+			
+			$(' #idDetails').removeClass("hidden");
+			$('#divForGraphStud').removeClass("hidden");
+			
+			$('#divForGraphStud #titleStud').html('GPA for Student '+name);
+			$('#divForGraphStud #subtitleStud').html('For All semester');
+			
+			var labelData = [];
+			var seriesData = [];
+			var weirdData = [];
+			var totalHeight = 0;
+			
+			for (i = 0; i < result.length; i++) {
+				labelData.push('Year '+result[i][1]);
+				seriesData.push(parseInt(result[i][0]));
+				totalHeight += parseInt(result[i][0]);
+			}
+			
+			weirdData.push(seriesData);
+			graphControll(labelData,weirdData,'#StudChart',totalHeight,'line');
 		}
 	})
 });

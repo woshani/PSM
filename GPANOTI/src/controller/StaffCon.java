@@ -87,7 +87,7 @@ public class StaffCon {
     
     public String registerStaff(Staff staff) {
     	String msg = null;
-    	String sql = "{call ins_staff(?,?,?,?,?,?) }";
+    	String sql = "{call ins_staff(?,?,?,?,?,?,?) }";
     	CallableStatement cstm = null;
     	int status = 0 ;
     	
@@ -100,9 +100,10 @@ public class StaffCon {
             cstm.setString(4, staff.getEmail());
             cstm.setString(5, staff.getPhoneNum());
             cstm.setString(6, staff.getPassword());
+            cstm.setString(7, staff.getCreateBy());
             status = cstm.executeUpdate();
             cstm.close();
-            
+            System.out.print(staff.getCreateBy());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             status = ((SQLException) e).getErrorCode();

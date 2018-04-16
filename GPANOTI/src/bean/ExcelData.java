@@ -14,6 +14,7 @@ public class ExcelData {
 	private String academicAdvisor;
 	private String phoneNumber;
 	private String sesi;
+	private String createBy;
 
 	// setter and getter for variable
 	public String getName() {
@@ -111,5 +112,13 @@ public class ExcelData {
 	public void setSesi(String sesi) {
 		this.sesi = sesi;
 	}
-			
+
+	public String getCreated_by() {
+		return createBy;
+	}
+
+	public void setCreated_by(String createBy) {
+		this.createBy = createBy;
+	}
+	
 }

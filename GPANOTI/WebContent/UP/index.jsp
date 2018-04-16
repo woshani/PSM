@@ -101,6 +101,7 @@
 	var oJS;
 	var newOJS;
 	var arr = new Array();
+	var createdby = "<% out.print(session.getAttribute("staffid").toString());%>";
 
 	/*
 		button upload file when click run function to extract data and parse to servlet
@@ -126,7 +127,6 @@
 				var worksheet = wb.Sheets[sheetName];
 				oJS = XLS.utils.sheet_to_json(worksheet);
 				newOJS = XLS.utils.sheet_to_json(worksheet);
-				
 				var sts = JSON.stringify(newOJS[1]);
 				var stringW = sts.split("SESI PENGAJIAN :").pop();
 				var sesi = stringW.substring(0,12);
@@ -138,6 +138,7 @@
 				//xxxx["sesi"] = sesi;
 				$.each(xxxx ,function(poss,obj){
 					obj.sessions = sesi.trim();
+					obj.createBy = createdby;
 				});
 				//console.log(xxxx);
 				
@@ -148,7 +149,7 @@
 			});
 
 			
-			var keys = ["bil", "name","matricNumber","course","cohort","muet","yearsem","gpa","academicAdvisor","status","phoneNumber","sesi"];
+			var keys = ["bil", "name","matricNumber","course","cohort","muet","yearsem","gpa","academicAdvisor","status","phoneNumber","sesi","createBy"];
 			$.each(arr ,function(pos,obj){
 			    var counter = 0;
 			    $.each(obj,function(key,value){
@@ -157,10 +158,10 @@
 			        counter++;
 			    });
 			});
-			
+			console.log(arr);
 			//convert array into string
 			var st = JSON.stringify(arr);
-			console.log(st);
+			//console.log(st);
 			
 			/*
 				ajax to send data to the servlet

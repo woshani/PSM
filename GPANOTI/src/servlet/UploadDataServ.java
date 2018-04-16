@@ -65,7 +65,7 @@ public class UploadDataServ extends HttpServlet {
         response.setContentType("application/json");            
  
         for(ExcelData exce : exs){
-        	System.out.println("Name is -- "+exce.getSesi());
+        	System.out.println("Name is -- "+exce.getCreated_by());
         }
         
         int result = edc.insertdata(exs);

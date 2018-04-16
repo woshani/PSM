@@ -11,20 +11,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import bean.Student;
 import controller.ExcelDataCon;
 
 /**
- * Servlet implementation class getBySession
+ * Servlet implementation class GetByMatric
  */
-@WebServlet("/getBySession")
-public class getBySession extends HttpServlet {
+@WebServlet("/GetByMatric")
+public class GetByMatric extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public getBySession() {
+    public GetByMatric() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,17 +44,29 @@ public class getBySession extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
-PrintWriter out= response.getWriter();
+		PrintWriter out= response.getWriter();
 		
-		//BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String jsonGetsesi = request.getParameter("sesi");
-        String jsonGetcourse = request.getParameter("kos");
-        String jsonGetYear = request.getParameter("year");
+        String jsonGetmatrik = request.getParameter("matrik");
+
 
 		ExcelDataCon exc = new ExcelDataCon();
-		ArrayList<ArrayList<String>> res = exc.getBySesi(jsonGetsesi, jsonGetcourse);
+		Student stud = exc.getByMatric(jsonGetmatrik);
+		ArrayList<ArrayList<String>> res = stud.getResults();
 		String json = new Gson().toJson(res);
-        out.print(json); 
+		
+		System.out.println(json);
+		System.out.println(stud.getName());
+		System.out.println(stud.getMatric());
+		System.out.println(stud.getCohort());
+		System.out.println(stud.getCourse());
+		System.out.println(stud.getPA());
+		System.out.println(stud.getPhone());
+		System.out.println(stud.getStatus());
+		
+		Gson gson = new GsonBuilder().serializeNulls().create();
+	    String jsonInString = gson.toJson(stud);
+	    
+		out.print(jsonInString);
 	}
 
 }

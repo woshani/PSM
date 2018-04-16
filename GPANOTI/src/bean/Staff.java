@@ -7,6 +7,7 @@ public class Staff {
 	private String email;
 	private String phoneNum;
 	private String password;
+	private String createBy;
 	
 	
 	public String getStaffID() {
@@ -45,6 +46,13 @@ public class Staff {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public String getCreateBy() {
+		return createBy;
+	}
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+	
 	
 	
 }

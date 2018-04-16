@@ -88,6 +88,7 @@
 <jsp:include page="../include/jsload.jsp" />
 
 <script>
+	var create_by = "<% out.print(session.getAttribute("staffid").toString());%>";
 	//function get list of all staff
 	function getStaff() {
 		$.ajax({
@@ -128,7 +129,7 @@
 						var email = $('#staffemail').val();
 						var phone = $('#staffphone').val();
 						var address = $('#staffaddress').val();
-						var datas = {staffid:staffid,fullname:fullname,email:email,phone:phone,address:address};
+						var datas = {staffid:staffid,fullname:fullname,email:email,phone:phone,address:address,create_by:create_by};
 						
 						console.log(datas);
 						
@@ -140,7 +141,7 @@
 							$.ajax({
 								type : "post",
 								url : "../RegisterStaff",
-								data:{staffid:staffid,fullname:fullname,email:email,phone:phone,address:address},
+								data:{staffid:staffid,fullname:fullname,email:email,phone:phone,address:address,create_by:create_by},
 								success : function(databack) {
 									//databack = $.parseJSON(databack);
 									console.log(databack);

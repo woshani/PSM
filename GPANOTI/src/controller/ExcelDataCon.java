@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import bean.ExcelData;
 import bean.Staff;
+import bean.Student;
 import connection.OracleConnection;
 import oracle.jdbc.OracleTypes;
 import oracle.sql.ARRAY;
@@ -40,7 +41,7 @@ public class ExcelDataCon {
 	        for (int index = 0; index < exs.size(); index++)
 	        {
 	            ExcelData ex = exs.get(index);
-	            Object[] params = new Object[12];
+	            Object[] params = new Object[13];
 	            params[0] = ex.getBil();
 	            params[1] = ex.getName();
 	            params[2] = ex.getMatricNumber();
@@ -53,6 +54,7 @@ public class ExcelDataCon {
 	            params[9] = ex.getAcademicAdvisor();
 	            params[10] = ex.getPhoneNumber();
 	            params[11] = ex.getSesi();
+	            params[12] = ex.getCreated_by();
 	            
 	            STRUCT struct = new STRUCT(structDescriptor, conn, params);
 	            structs[index] = struct;
@@ -191,6 +193,52 @@ public class ExcelDataCon {
 			e.printStackTrace();
 		}
 		return res;
+	}
+	
+	public Student getByMatric(String matricNo) {
+		Student stud = new Student();
+		String sql = "{call getByMatric(?,?,?,?,?,?,?,?)}";
+		CallableStatement cstm = null;
+		ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
+		
+        try {
+            conn = dbconn.getConnection();
+            cstm = conn.prepareCall(sql);
+            cstm.setString(1, matricNo);
+            cstm.registerOutParameter(2, OracleTypes.VARCHAR);
+            cstm.registerOutParameter(3, OracleTypes.VARCHAR);
+            cstm.registerOutParameter(4, OracleTypes.VARCHAR);
+            cstm.registerOutParameter(5, OracleTypes.VARCHAR);
+            cstm.registerOutParameter(6, OracleTypes.VARCHAR);
+            cstm.registerOutParameter(7, OracleTypes.VARCHAR);
+            cstm.registerOutParameter(8, OracleTypes.CURSOR);
+            cstm.executeQuery();
+            stud.setMatric(matricNo);
+            stud.setName(cstm.getString(2));
+            stud.setCourse(cstm.getString(3));
+            stud.setCohort(cstm.getString(4));
+            stud.setStatus(cstm.getString(5));
+            stud.setPA(cstm.getString(6));
+            stud.setPhone(cstm.getString(7));
+            
+            ResultSet rs = (ResultSet) cstm.getObject(8);
+            
+            while (rs.next()) {
+            	ArrayList<String> x = new ArrayList<String>();
+            	x.add(String.valueOf(rs.getInt(1)));
+            	x.add(rs.getString(2));
+            	res.add(x);
+            }
+            stud.setResults(res);
+            
+            cstm.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return stud;
 	}
 }
 
