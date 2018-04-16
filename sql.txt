@@ -288,6 +288,14 @@ open p_cursor for
 select r.years from results r inner join student s on s.MATRIC_NO = r.MATRIC_NO and s.COURSE = p_course where r.SESSIONS = p_sesi group by r.years;
 end;
 
+create or replace procedure getBySession(p_sesi in varchar2,p_kos in varchar2,p_year in varchar2,p_res out number)
+as
+begin
+select  count(r.gpa) into p_res from results r 
+inner join STUDENT s on s.MATRIC_NO = r.MATRIC_NO and s.course = p_kos 
+where r.YEARS = p_year and r.sessions = p_sesi and r.gpa > 3.0;
+end;
+
 
 ----------------------------------------------------
 type

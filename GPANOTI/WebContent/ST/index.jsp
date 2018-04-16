@@ -105,21 +105,34 @@ function getsesiajax(){
 	})
 }
 
+function graphControll(labesData,seriesData,location,height){
+	var dataGraph = {
+	        labels: labesData,
+	        series: seriesData
+	    };
+    var optionbarchart = {
+            axisX: {
+                showGrid: false
+            },
+            low: 0,
+            high: height,
+            chartPadding: {
+                top: 0,
+                right: 5,
+                bottom: 0,
+                left: 0
+            }
+        };
+	showbarchart(dataGraph,location,optionbarchart);
+}
 
 //function when document load 
 $(document).ready(function() {
-	var dataEmailsSubscriptionChart = {
-	        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-	        series: [
-	            [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
-
-	        ]
-	    };
-	showbarchart(dataEmailsSubscriptionChart,'#overviewChart');
 	
 	getsesiajax();
 	$('#formoverview #divcourse').hide();
 	$('#formoverview #divyear').hide();
+	$('#divForGraphOverview').hide();
 	
 });
 
@@ -158,13 +171,47 @@ $('#formoverview #selcourselist').on('change',function(){
 		success:function(databack){
 			console.log(databack);
 			databack = $.parseJSON(databack);
-			$('#formoverview #divyear').show();
+			//$('#formoverview #divyear').show();
 			$('#formoverview #selyearlist').append('<option selected disabled>Please select years</option>');
 			var i;
 			for (i = 0; i < databack.length; i++) {
 				 var option = new Option(databack[i], databack[i]);
 				 $('#formoverview #selyearlist').append($(option));
 			}
+		}
+	})
+});
+
+$('#formoverview #btnSearchOverview').on('click',function(){
+	var sesi = $('#formoverview #selsesilist').val();
+	var course =  $('#formoverview #selcourselist').val();
+	var year =  $('#formoverview #selyearlist').val();
+	
+	$.ajax({
+		type:'post',
+		url:'../getBySession',
+		data:{sesi : sesi, kos : course ,year : year},
+		success:function(databack){
+			$('#divForGraphOverview').show();
+			$('#divForGraphOverview #titleOverview').html('GPA with 3.0 and above');
+			$('#divForGraphOverview #subtitleOverview').html('For Course: '+course+' Semester: '+sesi);
+			databack = $.parseJSON(databack);
+			//alert(databack);
+			console.log(databack);
+			
+			var labelData = [];
+			var seriesData = [];
+			var weirdData = [];
+			var totalHeight = 0;
+			
+			for (i = 0; i < databack.length; i++) {
+				labelData.push('Year '+databack[i][1]);
+				seriesData.push(parseInt(databack[i][0]));
+				totalHeight += parseInt(databack[i][0]);
+			}
+			
+			weirdData.push(seriesData);
+			graphControll(labelData,weirdData,'#overviewChart',totalHeight);
 		}
 	})
 });

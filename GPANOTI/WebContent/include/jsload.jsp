@@ -33,20 +33,7 @@ function shownoti(messagee,typee){
         }
     });
 }
-function showbarchart(dataChart,idDiv){
-    var optionbarchart = {
-            axisX: {
-                showGrid: false
-            },
-            low: 0,
-            high: 1000,
-            chartPadding: {
-                top: 0,
-                right: 5,
-                bottom: 0,
-                left: 0
-            }
-        };
+function showbarchart(dataChart,idDiv,optionbarchart){
         var responsiveOptions = [
             ['screen and (max-width: 640px)', {
                 seriesBarDistance: 5,

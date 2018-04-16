@@ -160,5 +160,37 @@ public class ExcelDataCon {
 		
 		return Years;
 	}
+	
+	public ArrayList<ArrayList<String>> getBySesi(String sesi,String kos) {
+		//int res = 0;
+		
+		String sql = "{call getBySession(?,?,?)}";
+		CallableStatement cstm = null;
+		ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
+		
+        try {
+            conn = dbconn.getConnection();
+            cstm = conn.prepareCall(sql);
+            cstm.setString(1, sesi);
+            cstm.setString(2, kos);
+            cstm.registerOutParameter(3, OracleTypes.CURSOR);
+            cstm.executeQuery();
+            ResultSet rs = (ResultSet) cstm.getObject(3);
+            while (rs.next()) {
+            	ArrayList<String> x = new ArrayList<String>();
+            	x.add(String.valueOf(rs.getInt(1)));
+            	x.add(rs.getString(2));
+            	res.add(x);
+            }
+            
+            cstm.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
+	}
 }
 
