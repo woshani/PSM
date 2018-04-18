@@ -138,7 +138,7 @@
 				//xxxx["sesi"] = sesi;
 				$.each(xxxx ,function(poss,obj){
 					obj.sessions = sesi.trim();
-					obj.createBy = createdby;
+					obj.create = createdby;
 				});
 				//console.log(xxxx);
 				
@@ -149,7 +149,7 @@
 			});
 
 			
-			var keys = ["bil", "name","matricNumber","course","cohort","muet","yearsem","gpa","academicAdvisor","status","phoneNumber","sesi","createBy"];
+			var keys = ["bil", "name","matricNumber","course","cohort","muet","yearsem","gpa","academicAdvisor","status","phoneNumber","sesi","created_by"];
 			$.each(arr ,function(pos,obj){
 			    var counter = 0;
 			    $.each(obj,function(key,value){
@@ -158,7 +158,7 @@
 			        counter++;
 			    });
 			});
-			console.log(arr);
+			//console.log(arr);
 			//convert array into string
 			var st = JSON.stringify(arr);
 			//console.log(st);
