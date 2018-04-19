@@ -25,9 +25,12 @@
 							class="material-icons">dashboard</i>
 							<p>Home</p>
 					</a></li>
-					<li class="active"><a href="index.jsp"> <i
+					<li class="active"><a role="tab" data-toggle="tab" href="#uploadTab"> <i
 							class="material-icons">file_upload</i>
 							<p>Upload Excel File</p>
+					</a></li>
+					<li class=""><a role="tab" data-toggle="tab" href="#notiTab"> <i class="material-icons">announcement</i>
+							<p>Notification</p>
 					</a></li>
 				</ul>
 			</div>
@@ -59,33 +62,17 @@
 			</nav>
 			<div class="content">
 				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="card">
-								<div class="card-header" data-background-color="purple">
-									<h4 class="title">Upload</h4>
-									<p class="category">File must be excel format</p>
-								</div>
-								<div class="card-content">
-									<form method="post" enctype="multipart/form-data"
-										action="UploadServ">
-										<div class="row">
-											<div class="col-md-4">
-												<div class="form-group label-floating">
-													<a class="btn-floating purple-gradient mt-0 float-left">
-														<i class="material-icons">file_upload</i> <input
-														type="file" id="uploadinpout">
-													</a> <input type="text" class="form-control"
-														placeholder="browse file.." id="filename" readonly="">
-												</div>
-											</div>
-										</div>
-										<button type="submit" class="btn btn-primary pull-right"
-											id="btnuploadexcel" disabled>Upload File</button>
-										<div class="clearfix"></div>
-										<div id="my_file_output"></div>
-									</form>
-								</div>
+					<div class="col-md-12">
+						<div class="tab-content">
+							<div role="tabpanel" id="uploadTab" class="tab-pane active">
+								<h3 style="margin: 0px; padding: 0px;">Upload</h3>
+								<hr />
+								<jsp:include page="Upload.jsp" />
+							</div>
+							<div role="tabpanel" id="notiTab" class="tab-pane">
+								<h3 style="margin: 0px; padding: 0px;">Notification</h3>
+								<hr />
+								<jsp:include page="notification.jsp" />
 							</div>
 						</div>
 					</div>
@@ -101,96 +88,101 @@
 	var oJS;
 	var newOJS;
 	var arr = new Array();
-	var createdby = "<% out.print(session.getAttribute("staffid").toString());%>";
+	var createdby = "<%out.print(session.getAttribute("staffid").toString());%>";
 
 	/*
 		button upload file when click run function to extract data and parse to servlet
 	 */
-	$('#btnuploadexcel').on('click', function(e) {
-		e.preventDefault();
-		var oFile = document.getElementById('uploadinpout').files[0];
-		// Create A File Reader HTML5
-		var reader = new FileReader();
-		arr = [];
-		// Ready The Event For When A File Gets Selected
-		reader.onload = function(e) {
-			var data = e.target.result;
-			var cfb = XLS.CFB.read(data, {
-				type : 'binary'
-			});
-			var wb = XLS.parse_xlscfb(cfb);
-			// Loop Over Each Sheet
-			wb.SheetNames.forEach(function(sheetName) {
-				/* 
-					Obtain The Current Row As JSON
-				 */
-				var worksheet = wb.Sheets[sheetName];
-				oJS = XLS.utils.sheet_to_json(worksheet);
-				newOJS = XLS.utils.sheet_to_json(worksheet);
-				var sts = JSON.stringify(newOJS[1]);
-				var stringW = sts.split("SESI PENGAJIAN :").pop();
-				var sesi = stringW.substring(0,12);
-				//console.log(stringW);
-				//console.log(sesi);
-				
-				oJS.splice(0, 3);
-				var xxxx = oJS;
-				//xxxx["sesi"] = sesi;
-				$.each(xxxx ,function(poss,obj){
-					obj.sessions = sesi.trim();
-					obj.create = createdby;
-				});
-				//console.log(xxxx);
-				
-				var newarr = arr.concat(xxxx);
-				arr = newarr;
-				
-				
-			});
+	$('#uploadTab #btnuploadexcel').on('click',function(e) {
+						e.preventDefault();
+						var oFile = document.getElementById('uploadinpout').files[0];
+						// Create A File Reader HTML5
+						var reader = new FileReader();
+						arr = [];
+						// Ready The Event For When A File Gets Selected
+						reader.onload = function(e) {
+							var data = e.target.result;
+							var cfb = XLS.CFB.read(data, {
+								type : 'binary'
+							});
+							var wb = XLS.parse_xlscfb(cfb);
+							// Loop Over Each Sheet
+							wb.SheetNames.forEach(function(sheetName) {
+								/* 
+									Obtain The Current Row As JSON
+								 */
+								var worksheet = wb.Sheets[sheetName];
+								oJS = XLS.utils.sheet_to_json(worksheet);
+								newOJS = XLS.utils.sheet_to_json(worksheet);
+								var sts = JSON.stringify(newOJS[1]);
+								var stringW = sts.split("SESI PENGAJIAN :")
+										.pop();
+								var sesi = stringW.substring(0, 12);
+								//console.log(stringW);
+								//console.log(sesi);
 
-			
-			var keys = ["bil", "name","matricNumber","course","cohort","muet","yearsem","gpa","academicAdvisor","status","phoneNumber","sesi","created_by"];
-			$.each(arr ,function(pos,obj){
-			    var counter = 0;
-			    $.each(obj,function(key,value){
-			    	arr [pos][keys[counter]] = value;
-			        delete arr [pos][key];
-			        counter++;
-			    });
-			});
-			//console.log(arr);
-			//convert array into string
-			var st = JSON.stringify(arr);
-			//console.log(st);
-			
-			/*
-				ajax to send data to the servlet
-			 */
-			$.ajax({
-				type:'post',
-				url:'../UploadDataServ',
-				data: st,
-				success:function(databackk){
-					console.log(databackk);
-					if(databackk===1){
-						shownoti("Data in excell file has been uploaded!",
-						"success");
-					}else if(databackk===0){
-						shownoti("Data in excell file failed to upload!",
-						"danger");
-					}
-				},
-				dataType: 'json',
-				contentType: 'application/json',
-		        mimeType: 'application/json'
-			});
+								oJS.splice(0, 3);
+								var xxxx = oJS;
+								//xxxx["sesi"] = sesi;
+								$.each(xxxx, function(poss, obj) {
+									obj.sessions = sesi.trim();
+									obj.create = createdby;
+								});
+								//console.log(xxxx);
 
-		};
-		/* 
-			Tell JS To Start Reading The File.. You could delay this if desired 
-		 */
-		reader.readAsBinaryString(oFile);
-	});
+								var newarr = arr.concat(xxxx);
+								arr = newarr;
+
+							});
+
+							var keys = [ "bil", "name", "matricNumber",
+									"course", "cohort", "muet", "yearsem",
+									"gpa", "academicAdvisor", "status",
+									"phoneNumber", "sesi", "created_by" ];
+							$.each(arr, function(pos, obj) {
+								var counter = 0;
+								$.each(obj, function(key, value) {
+									arr[pos][keys[counter]] = value;
+									delete arr[pos][key];
+									counter++;
+								});
+							});
+							//console.log(arr);
+							//convert array into string
+							var st = JSON.stringify(arr);
+							//console.log(st);
+
+							/*
+								ajax to send data to the servlet
+							 */
+							$
+									.ajax({
+										type : 'post',
+										url : '../UploadDataServ',
+										data : st,
+										success : function(databackk) {
+											console.log(databackk);
+											if (databackk === 1) {
+												shownoti(
+														"Data in excell file has been uploaded!",
+														"success");
+											} else if (databackk === 0) {
+												shownoti(
+														"Data in excell file failed to upload!",
+														"danger");
+											}
+										},
+										dataType : 'json',
+										contentType : 'application/json',
+										mimeType : 'application/json'
+									});
+
+						};
+						/* 
+							Tell JS To Start Reading The File.. You could delay this if desired 
+						 */
+						reader.readAsBinaryString(oFile);
+					});
 
 	/*
 		function when select file trigger event to check extension file
