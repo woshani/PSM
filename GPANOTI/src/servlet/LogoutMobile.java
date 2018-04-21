@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,21 +9,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
+import org.json.JSONObject;
 
-import controller.ExcelDataCon;
+import bean.Student;
+import controller.MobileController;
 
 /**
- * Servlet implementation class getBySession
+ * Servlet implementation class LogoutMobile
  */
-@WebServlet("/getBySession")
-public class GetBySession extends HttpServlet {
+@WebServlet("/LogoutMobile")
+public class LogoutMobile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetBySession() {
+    public LogoutMobile() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,17 +42,23 @@ public class GetBySession extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
-PrintWriter out= response.getWriter();
-response.setContentType("text/plain"); 
-		
-		//BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String jsonGetsesi = request.getParameter("sesi");
-        String jsonGetcourse = request.getParameter("kos");
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out= response.getWriter();
+		String matric = request.getParameter("matric");
+			System.out.println(matric);
+			String message;
+			JSONObject json = new JSONObject();
+			MobileController mc = new MobileController();
+			String res = mc.logoutMobile(matric);
+			if(!res.isEmpty()) {
+				json.put("res", res);
+			}else {
+				json.put("res", "error");
+			}
 
-		ExcelDataCon exc = new ExcelDataCon();
-		ArrayList<ArrayList<String>> res = exc.getBySesi(jsonGetsesi, jsonGetcourse);
-		String json = new Gson().toJson(res);
-        out.print(json); 
+			
+			message = json.toString();
+			out.print(message);
 	}
 
 }

@@ -3,7 +3,7 @@ package bean;
 
 public class NotificationMessage {
 	
-	//private final String title = "PRIM Messaging Services 2017";
+	//private final String title = "GPANOTI";
 	private String title;
 	private String message;
 	private Project project;

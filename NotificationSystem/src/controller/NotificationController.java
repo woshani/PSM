@@ -277,16 +277,16 @@ public class NotificationController {
 
 		ArrayList<String> usersToken = new ArrayList<String>();
 
-		String userDeviceIdKey1 = "dT_m2jYxKWY:APA91bFhx9b-82Fn-w2fWvMhhTHwSrnMmnTwL9hbbtz5_B0n57KmNcZownZuBQWjiOiIKVvsoKFAdiBlGbi0P3BPoA_Hey7uP9ltmU9sThuT_45mPccZVnkU0skCVbOaCB8il2Jq1-hg";
-		String userDeviceIdKey2 = "eQlWK0Y2oeE:APA91bEhenpfCIOGtKQOMcalybH5I7s3ZxyiAz_-dOiIj0KCE2MFqICPwwnr1vTvF88vBqZz1-1ZMacCui-E_fJbOBt3mGhJknJXfRT68QE908e0ti0YVwghH60fAzSMrgm-jj94coS1";
-		String userDeviceIdKey3 = "eQlWK0Y2oeE:APA91bEhenpfCIOGtKQOMcalybH5I7s3ZxyiAz_-dOiIj0KCE2MFqICPwwnr1vTvF88vBqZz1-1ZMacCui-E_fJbOBt3mGhJknJXfRT68QE908e0ti0YVwghH60fAzSMrgm-jj94coS2";
+		String userDeviceIdKey1 = "eU5R2ok8Kd8:APA91bFpNAEQB387PpDsZEdGGi2FNN9iJz0FKhd3l2k72U9DvZXlIb0jutezS9zMHswrw9MiEMKSsGeMGVCepK6A0HnpZ6Rf1ukpxNBWwRSJQPO5cKstYkUZzuccSiTguyslhV3unoTr";
+		String userDeviceIdKey2 = "eCtSm3159G8:APA91bFUK4c6-EN1m7aZ1wLv3m_Lfy7J-pmfJ9ivmdBm3n-DzIfhj-c8Ok77oDzfSkIKXPq491jr3aJ4ZqP1A29Hh6hyLUORrZzxGnlW1Bqrfm8Fa0VkqWpE61meXe-dJ6pmQTQr7wmx";
+		String userDeviceIdKey3 = "chpnKUc2BaE:APA91bHpD18szMrBdb5WCyre2X1UcL57a1X5Nu74CjW31YLNlrFBch8XaXw8ypI-bFUOWRSBIqGTWpZ0SGppfbtjy-cYymXYIOqzt1OJ9xmqykyVA9Ei70rf_LChMKII7s6HEL0G410L";
 		
 		usersToken.add(userDeviceIdKey1);
-		usersToken.add(userDeviceIdKey2);
+		//usersToken.add(userDeviceIdKey2);
 		usersToken.add(userDeviceIdKey3);
 
-		String projectName = "PRIM";
-		String authKey = "AAAA8nKsqc0:APA91bHAgh2_CY_dwxdh330wlI2OH78OK7pCr74SNQn_X3n_0s2oQYDYXWr6qgqzE6Y6d0qkoUcDl9ynSorAyWv6okSTBFY64gFPKI6ZIJzJjsQ-cBZIJC8gKJ58b6serrazpapzAvt9";
+		String projectName = "GPANOTI";
+		String authKey = "AAAAohCpuoo:APA91bG3rgqdkn8XdgWT_P7Sp-g8kBt0CMjDGu58VcRrfU5-3_mEyFbI3onCEVjrMNGGYmXD7DPITPqwKZHeHJgshnYAWXCdZL3SOShUqqrJ5RBRjvpgbhWyVHOjYJY6L4mvm-kCvVM9";
 
 		Project project = new Project(projectName, authKey);
 
@@ -295,7 +295,8 @@ public class NotificationController {
 
 		NotificationController nc = new NotificationController();
 		try {
-			nc.pushFCMNotificationMulti(usersToken, message);
+			//nc.pushFCMNotificationMulti(usersToken, message);
+			nc.pushFCMNotification(userDeviceIdKey3, message);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

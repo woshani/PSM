@@ -43,6 +43,7 @@ public class GetStaffListServ extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+		response.setContentType("text/plain"); 
 		StaffCon sc = new StaffCon();
 		try {
 			ArrayList<Staff> staffs = sc.getListStaff();

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%
 	session = request.getSession(false);
 	if (session.getAttribute("staffid") == null) {
@@ -88,7 +87,7 @@
 	var oJS;
 	var newOJS;
 	var arr = new Array();
-	var createdby = "<%out.print(session.getAttribute("staffid").toString());%>";
+	var createdby = '<%out.print(session.getAttribute("staffid").toString());%>';
 
 	/*
 		button upload file when click run function to extract data and parse to servlet
@@ -212,5 +211,47 @@
 		}
 
 	}
+	
+	function getsesiajax(){
+		$.ajax({
+			type:"post",
+			url:"../ListSesiServ",
+			success:function(databack){
+				databack = $.parseJSON(databack);
+				var i;
+				for (i = 0; i < databack.length; i++) {
+					 var option = new Option(databack[i], databack[i]);
+					 $('#notiTab #formNoti #selsesilist').append($(option));
+				}
+			},
+			contentType : "application/json"
+		})
+	}
+	
+	$(document).ready(function() {	
+		getsesiajax();
+		
+	});
+	
+	$('#notiTab #formNoti #btnsentNoti').on('click',function(e){
+		e.preventDefault();
+		var sesi =  $('#notiTab #formNoti #selsesilist').val();
+		console.log(sesi);
+		$.ajax({
+			type:"post",
+			data:{sessions : sesi,sender:createdby},
+			url:"../SendPushNoti",
+			success:function(pulangdata){
+				console.log(pulangdata);
+				
+				if(pulangdata==="OKAY"){
+					shownoti("Notification Sent!","success");
+				}else{
+					shownoti("Something was wrong during sending the notification","danger");
+				}
+			}
+		})
+		
+	})
 </script>
 </html>

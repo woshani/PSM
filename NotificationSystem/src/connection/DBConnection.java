@@ -28,11 +28,11 @@ public class DBConnection {
 		 * the connection url, and the username and
 		 * password to connect the database
 		 */
-		username = "ns";
-		password = "ns2017";
-		serverIP = "10.1.3.170";
+		username = "shay";
+		password = "shay";
+		serverIP = "localhost";
 		port = "1522";
-		dbName = "FTMKCRIM";
+		dbName = "GPANOTI";
 
 		
 		
