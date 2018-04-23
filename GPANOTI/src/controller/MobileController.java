@@ -4,8 +4,11 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import bean.DataModel;
 import bean.ExcelData;
 import bean.NotificationMessage;
 import bean.PushNoti;
@@ -100,7 +103,7 @@ public class MobileController {
 	            while (rs.next()) {
 	                PushNoti pn = new PushNoti();
 	                
-	                String title = "GPA FOR SEMESTER/SESSION "+sesisons;
+	                String title = "Result for: "+sesisons;
 	                String message = "Your GPA is "+String.valueOf(rs.getInt(3));
 	                NotificationMessage nm = new NotificationMessage(title,message);
 	                
@@ -162,5 +165,66 @@ public class MobileController {
 			}
 			
 			return statusquery;
+		}
+		
+		public String changePass(String matric,String oldPass,String newPass) {
+			String res = null;
+			
+			String sql = "{call change_pass(?,?,?,?)}";
+			CallableStatement cstm = null;
+	        try {
+	            conn = dbconn.getConnection();
+	            cstm = conn.prepareCall(sql);
+	            cstm.setString(1, oldPass);
+	            cstm.setString(2, newPass);
+	            cstm.setString(3, matric);
+	            cstm.registerOutParameter(4, OracleTypes.VARCHAR);
+	            cstm.executeQuery();
+	            
+	            res = cstm.getString(4);
+	            cstm.close();
+	        } catch (SQLException e) {
+	            System.out.println(e.getMessage());
+	        } catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return res;
+		}
+		
+		public ArrayList<DataModel> getMessage(String matric) {
+			ArrayList<DataModel> res = new ArrayList<DataModel>();
+			
+			String sql = "{call selMessage(?,?)}";
+			CallableStatement cstm = null;
+	        try {
+	            conn = dbconn.getConnection();
+	            cstm = conn.prepareCall(sql);
+	            cstm.setString(1, matric);
+	            cstm.registerOutParameter(2, OracleTypes.CURSOR);
+	            cstm.executeQuery();
+	            ResultSet rs = (ResultSet) cstm.getObject(2);
+
+	            while (rs.next()) {
+	            	DataModel al = new DataModel();
+	            	al.setMessageId(rs.getString(1));
+	            	al.setMessageTitle(rs.getString(2));
+	            	al.setMessageBody(rs.getString(3));
+	            	al.setReceiver(rs.getString(4));
+	            	al.setSender(rs.getString(5));
+	            	
+	            	java.sql.Timestamp dbSqlTimestamp = rs.getTimestamp(6);
+	            	String s = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(dbSqlTimestamp);
+	            	al.setDate(s);
+	            	res.add(al);
+	            }
+	            cstm.close();
+	        } catch (SQLException e) {
+	            System.out.println(e.getMessage());
+	        } catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return res;
 		}
 }
